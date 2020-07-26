@@ -1,0 +1,15 @@
+.node-version
+/node_modules
+/dist
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Tests
+/coverage
+/.nyc_output
+
+# Documentation
+/documentation
