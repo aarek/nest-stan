@@ -1,27 +1,26 @@
 import { applyDecorators, Injectable, SetMetadata } from '@nestjs/common';
-import { OptionsBuilder } from '../interfaces';
+import { SubscriberConfig, SubscribtionMetadata } from '../interfaces';
 import { STAN_SUBSCRIBE } from './constants';
 
-const defaultOptionsBuilder: OptionsBuilder = (so) => so.setStartWithLastReceived();
+const defaultConfig: SubscriberConfig = {
+  setupSubscription: (so) => so.setStartWithLastReceived(),
+};
 
-export const StanSubscribe = (subject: string, optionsBuilder?: OptionsBuilder) =>
+export const StanSubscribe = (subject: string, config: Partial<SubscriberConfig> = {}) =>
   applyDecorators(
     Injectable(),
-    SetMetadata(STAN_SUBSCRIBE, {
+    SetMetadata<Symbol, SubscribtionMetadata>(STAN_SUBSCRIBE, {
       subject,
-      optionsBuilder: optionsBuilder || defaultOptionsBuilder,
+      config: { ...defaultConfig, ...config },
     }),
   );
 
-export const AsyncStanSubscribe = (
-  subject: string,
-  optionsBuilder?: OptionsBuilder,
-) =>
+export const AsyncStanSubscribe = (subject: string, config: Partial<SubscriberConfig> = {}) =>
   applyDecorators(
     Injectable(),
-    SetMetadata(STAN_SUBSCRIBE, {
+    SetMetadata<Symbol, SubscribtionMetadata>(STAN_SUBSCRIBE, {
       subject,
-      optionsBuilder: optionsBuilder || defaultOptionsBuilder,
+      config: { ...defaultConfig, ...config },
       async: true,
     }),
   );

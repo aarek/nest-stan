@@ -2,7 +2,7 @@ import { Injectable, Type } from '@nestjs/common';
 import { DiscoveryService, Reflector } from '@nestjs/core';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { STAN_SUBSCRIBE } from '../decorators/constants';
-import { IStanSubscriber } from '../interfaces';
+import { IStanSubscriber, SubscribtionMetadata } from '../interfaces';
 import { StanConnection } from '../stan-connection';
 
 @Injectable()
@@ -18,11 +18,11 @@ export class SubscribersExplorer {
       .filter((wrapper) => this.isStanSubscriber(wrapper.metatype))
       .forEach((wrapper: InstanceWrapper<IStanSubscriber>) => {
         const { instance, metatype } = wrapper;
-        const { subject, optionsBuilder, async } = this.getMetadata(metatype);
+        const { subject, config, async } = this.getMetadata(metatype);
 
         async
-          ? connection.registerAsyncSubscriber(subject, optionsBuilder, instance)
-          : connection.registerSubscriber(subject, optionsBuilder, instance);
+          ? connection.registerAsyncSubscriber(subject, config, instance)
+          : connection.registerSubscriber(subject, config, instance);
       });
   }
 
@@ -34,7 +34,7 @@ export class SubscribersExplorer {
     return !!this.getMetadata(target);
   }
 
-  private getMetadata(target: Type<any> | Function): any {
-    return this.reflector.get(STAN_SUBSCRIBE, target);
+  private getMetadata(target: Type<any> | Function): SubscribtionMetadata {
+    return this.reflector.get<SubscribtionMetadata, Symbol>(STAN_SUBSCRIBE, target);
   }
 }

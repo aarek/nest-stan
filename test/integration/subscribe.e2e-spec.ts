@@ -17,14 +17,14 @@ interface TestMessage {
   body: string;
 }
 
-@StanSubscribe('subject', (builder) => builder.setStartWithLastReceived())
+@StanSubscribe('subject', { setupSubscription: (builder) => builder.setStartWithLastReceived() })
 class Subscriber implements IStanSubscriber<TestMessage> {
   handle(message: TestMessage, context: IMessageHandlerContext): void {
     testHandler(message);
   }
 }
 
-@AsyncStanSubscribe('subject', (builder) => builder.setStartWithLastReceived())
+@AsyncStanSubscribe('subject', { setupSubscription: (builder) => builder.setStartWithLastReceived() })
 class AsyncSubscriber implements IStanSubscriber<TestMessage> {
   async handle(message: TestMessage, context: IMessageHandlerContext): Promise<void> {
     await testAsyncHandler(message);

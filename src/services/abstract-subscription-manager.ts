@@ -1,8 +1,7 @@
 import { Message, Stan, Subscription } from 'node-nats-streaming';
-import { IMessageHandlerContext, IStanSubscriber, OptionsBuilder } from '../interfaces';
+import { IMessageHandlerContext, IStanSubscriber, OptionsBuilder, MessageParser } from '../interfaces';
 
 type MessageHandler = (parsedData: any, msg: Message) => void;
-type MessageParser = (data: String | Buffer) => any;
 
 export class Context implements IMessageHandlerContext {
   constructor(private readonly msg: Message) {}

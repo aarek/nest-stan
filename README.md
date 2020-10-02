@@ -64,8 +64,10 @@ Nest Stan gives you two decorators `StanSubscribe` and `AsyncStanSubscribe`. `As
 ex.:
 
 ```typescript
-@StanSubscribe('subject', options =>
-  options.setStartAtTimeDelta(30 * 1000),
+@StanSubscribe('subject', {
+    setupSubscription: options =>
+      options.setStartAtTimeDelta(30 * 1000)
+  },
 )
 export class Subscriber implements IStanSubscriber<Message> {
   handle(message: Message, context: IMessageHandlerContext): void {
@@ -76,10 +78,12 @@ export class Subscriber implements IStanSubscriber<Message> {
 ```
 
 ```typescript
-@AsyncStanSubscribe('subject', options =>
-  options
-    .setStartAtTimeDelta(30 * 1000)
-    .setDurableName(AsyncSubscriber.name),
+@AsyncStanSubscribe('subject', {
+    setupSubscription: options =>
+      options
+        .setStartAtTimeDelta(30 * 1000)
+        .setDurableName(AsyncSubscriber.name),
+  },
 )
 export class AsyncSubscriber implements IStanSubscriber<Message> {
   async handle(message: Message, context: IMessageHandlerContext): Promise<void> {

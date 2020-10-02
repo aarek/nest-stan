@@ -6,9 +6,9 @@ import {
   IStanSubscriber,
   NestStanConnectionOptions,
   NEST_STAN_CONFIG_KEY,
-  OptionsBuilder,
   StanConnectionProvider,
   STAN_CONNECTION_PROVIDER,
+  SubscriberConfig,
 } from './interfaces';
 import {
   AbstractSubscriptionManager,
@@ -43,19 +43,19 @@ export class StanConnection {
 
   public registerSubscriber<T>(
     subject: string,
-    optionsBuilder: OptionsBuilder,
+    config: SubscriberConfig,
     subscriber: IStanSubscriber<T>,
   ): void {
-    this.addSubscription(new SubscriptionManager(subject, optionsBuilder, subscriber));
+    this.addSubscription(new SubscriptionManager(subject, config.setupSubscription, subscriber));
     this.logger.log(`Registered ${subscriber.constructor.name} {${subject}}`);
   }
 
   public registerAsyncSubscriber<T>(
     subject: string,
-    optionsBuilder: OptionsBuilder,
+    config: SubscriberConfig,
     subscriber: IStanSubscriber<T>,
   ): void {
-    this.addSubscription(new AsyncSubscriptionManager(subject, optionsBuilder, subscriber));
+    this.addSubscription(new AsyncSubscriptionManager(subject, config.setupSubscription, subscriber));
     this.logger.log(`Registered ${subscriber.constructor.name} {${subject}, async}`);
   }
 
