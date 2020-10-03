@@ -8,6 +8,7 @@ export * from './options-builder.interface';
 export * from './stan-publisher.interface';
 export * from './stan-subscriber.interface';
 export * from './message-parser';
+export * from './message-serializer';
 export * from './subscriber-config.iterface';
 export * from './subscription-metadata.interface';
 
