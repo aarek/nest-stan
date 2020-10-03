@@ -43,19 +43,19 @@ export class StanConnection {
 
   public registerSubscriber<T>(
     subject: string,
-    config: SubscriberConfig,
+    {messageParser, setupSubscription}: SubscriberConfig,
     subscriber: IStanSubscriber<T>,
   ): void {
-    this.addSubscription(new SubscriptionManager(subject, config.setupSubscription, subscriber));
+    this.addSubscription(new SubscriptionManager(subject, setupSubscription, messageParser, subscriber));
     this.logger.log(`Registered ${subscriber.constructor.name} {${subject}}`);
   }
 
   public registerAsyncSubscriber<T>(
     subject: string,
-    config: SubscriberConfig,
+    {messageParser, setupSubscription}: SubscriberConfig,
     subscriber: IStanSubscriber<T>,
   ): void {
-    this.addSubscription(new AsyncSubscriptionManager(subject, config.setupSubscription, subscriber));
+    this.addSubscription(new AsyncSubscriptionManager(subject, setupSubscription, messageParser, subscriber));
     this.logger.log(`Registered ${subscriber.constructor.name} {${subject}, async}`);
   }
 

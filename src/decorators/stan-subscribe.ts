@@ -4,6 +4,7 @@ import { STAN_SUBSCRIBE } from './constants';
 
 const defaultConfig: SubscriberConfig = {
   setupSubscription: (so) => so.setStartWithLastReceived(),
+  messageParser: (data) => JSON.parse(data.toString()),
 };
 
 export const StanSubscribe = (subject: string, config: Partial<SubscriberConfig> = {}) =>

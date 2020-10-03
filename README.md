@@ -59,14 +59,18 @@ export class AppModule {}
 
 ### Handling messages
 
-Nest Stan gives you two decorators `StanSubscribe` and `AsyncStanSubscribe`. `AsyncStanSubscribe` will automatically acknowledge message after successful `Promise` resolve. Both decorators accepts `subject` as first argument and optional `OptionsBuilder` as second argument. `OptionsBuilder` is a function accepting `node-nats-streaming` `SubscriptionOptions` and should return `SubscriptionOptions`.
+Nest Stan gives you two decorators `StanSubscribe` and `AsyncStanSubscribe`. `AsyncStanSubscribe` will automatically acknowledge message after successful `Promise` resolve.
+Both decorators accepts `subject` as first argument and optional config as second argument. Config object has two keys:
+- `setupSubscription` - function accepting `node-nats-streaming` `SubscriptionOptions` and returning `SubscriptionOptions`
+- `messageParser` - function accepting `String` or `Buffer` and returning parsed object
 
 ex.:
 
 ```typescript
 @StanSubscribe('subject', {
     setupSubscription: options =>
-      options.setStartAtTimeDelta(30 * 1000)
+      options.setStartAtTimeDelta(30 * 1000),
+    messageParser: (data) => JSON.parse(data.toString()),
   },
 )
 export class Subscriber implements IStanSubscriber<Message> {
@@ -83,6 +87,7 @@ export class Subscriber implements IStanSubscriber<Message> {
       options
         .setStartAtTimeDelta(30 * 1000)
         .setDurableName(AsyncSubscriber.name),
+    messageParser: (data) => JSON.parse(data.toString()),
   },
 )
 export class AsyncSubscriber implements IStanSubscriber<Message> {

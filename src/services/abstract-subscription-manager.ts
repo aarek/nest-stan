@@ -29,11 +29,11 @@ export class Context implements IMessageHandlerContext {
 
 export abstract class AbstractSubscriptionManager {
   protected activeSubscription: Subscription | undefined = undefined;
-  protected readonly messageParser: MessageParser = (data) => JSON.parse(data.toString());
 
   constructor(
     protected readonly subject: string,
     protected readonly optionsBuilder: OptionsBuilder,
+    protected readonly messageParser: MessageParser,
     protected readonly subscriber: IStanSubscriber,
   ) {}
 
