@@ -4,9 +4,8 @@ import { AbstractSubscriptionManager, Context } from './abstract-subscription-ma
 export class SubscriptionManager extends AbstractSubscriptionManager {
   async start(stan: Stan): Promise<void> {
     await this.setupSubscription(stan);
-    this.setuphandler((msg) => {
-      const message = JSON.parse(msg.getData().toString());
-      this.subscriber.handle(message, new Context(msg));
+    this.setuphandler((data, msg) => {
+      this.subscriber.handle(data, new Context(msg));
     });
   }
 }

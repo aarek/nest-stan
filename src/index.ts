@@ -12,5 +12,6 @@ export {
   IStanPublisher,
   IStanSubscriber,
   NestStanConnectionOptions,
+  MessageParser,
 } from './interfaces';
 export * from './nest-stan.module';

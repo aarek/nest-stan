@@ -1,7 +1,7 @@
 import { Message, Stan, Subscription } from 'node-nats-streaming';
-import { IMessageHandlerContext, IStanSubscriber, OptionsBuilder } from '../interfaces';
+import { IMessageHandlerContext, IStanSubscriber, OptionsBuilder, MessageParser } from '../interfaces';
 
-type MessageHandler = (msg: Message) => void;
+type MessageHandler = (parsedData: any, msg: Message) => void;
 
 export class Context implements IMessageHandlerContext {
   constructor(private readonly msg: Message) {}
@@ -33,6 +33,7 @@ export abstract class AbstractSubscriptionManager {
   constructor(
     protected readonly subject: string,
     protected readonly optionsBuilder: OptionsBuilder,
+    protected readonly messageParser: MessageParser,
     protected readonly subscriber: IStanSubscriber,
   ) {}
 
@@ -74,6 +75,10 @@ export abstract class AbstractSubscriptionManager {
   }
 
   protected setuphandler(handler: MessageHandler) {
-    this.activeSubscription?.on('message', handler);
+    this.activeSubscription?.on('message', (msg: Message) => handler(this.parseMessage(msg), msg));
+  }
+
+  protected parseMessage(message: Message): any {
+    return this.messageParser(message.getData());
   }
 }

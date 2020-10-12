@@ -10,9 +10,9 @@ class AsyncContext extends Context {
 export class AsyncSubscriptionManager extends AbstractSubscriptionManager {
   async start(stan: Stan): Promise<void> {
     await this.setupSubscription(stan, (options) => options.setManualAckMode(true));
-    this.setuphandler((msg) => {
-      Promise.resolve(JSON.parse(msg.getData().toString()))
-        .then((m) => this.subscriber.handle(m, new AsyncContext(msg)))
+    this.setuphandler((data, msg) => {
+      Promise.resolve()
+        .then(() => this.subscriber.handle(data, new AsyncContext(msg)))
         .then(() => msg.ack());
     });
   }
