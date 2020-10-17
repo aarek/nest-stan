@@ -13,6 +13,10 @@ export class AsyncSubscriptionManager extends AbstractSubscriptionManager {
     this.setuphandler((data, msg) => {
       Promise.resolve()
         .then(() => this.subscriber.handle(data, new AsyncContext(msg)))
+        .catch((err) => {
+          this.logError(err.message, err.stack);
+          return;
+         })
         .then(() => msg.ack());
     });
   }

@@ -1,5 +1,6 @@
 import { Message, Stan, Subscription } from 'node-nats-streaming';
 import { IMessageHandlerContext, IStanSubscriber, OptionsBuilder, MessageParser } from '../interfaces';
+import { Logger } from '@nestjs/common';
 
 type MessageHandler = (parsedData: any, msg: Message) => void;
 
@@ -29,13 +30,17 @@ export class Context implements IMessageHandlerContext {
 
 export abstract class AbstractSubscriptionManager {
   protected activeSubscription: Subscription | undefined = undefined;
+  protected readonly loggerContext: string;
 
   constructor(
+    private readonly logger: Logger,
     protected readonly subject: string,
     protected readonly optionsBuilder: OptionsBuilder,
     protected readonly messageParser: MessageParser,
     protected readonly subscriber: IStanSubscriber,
-  ) {}
+  ) {
+    this.loggerContext = `${subscriber.constructor.name} (${subject})`
+  }
 
   abstract start(stan: Stan): Promise<void>;
 
@@ -81,4 +86,11 @@ export abstract class AbstractSubscriptionManager {
   protected parseMessage(message: Message): any {
     return this.messageParser(message.getData());
   }
+
+  protected log(message: any) {
+    this.logger.log(message, this.loggerContext);
+  }
+   protected logError(message: any, stack: string) {
+     this.logger.error(message, stack, this.loggerContext);
+   }
 }

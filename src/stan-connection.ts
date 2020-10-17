@@ -46,7 +46,7 @@ export class StanConnection {
     {messageParser, setupSubscription}: SubscriberConfig,
     subscriber: IStanSubscriber<T>,
   ): void {
-    this.addSubscription(new SubscriptionManager(subject, setupSubscription, messageParser, subscriber));
+    this.addSubscription(new SubscriptionManager(this.logger, subject, setupSubscription, messageParser, subscriber));
     this.logger.log(`Registered ${subscriber.constructor.name} {${subject}}`);
   }
 
@@ -55,7 +55,7 @@ export class StanConnection {
     {messageParser, setupSubscription}: SubscriberConfig,
     subscriber: IStanSubscriber<T>,
   ): void {
-    this.addSubscription(new AsyncSubscriptionManager(subject, setupSubscription, messageParser, subscriber));
+    this.addSubscription(new AsyncSubscriptionManager(this.logger, subject, setupSubscription, messageParser, subscriber));
     this.logger.log(`Registered ${subscriber.constructor.name} {${subject}, async}`);
   }
 
