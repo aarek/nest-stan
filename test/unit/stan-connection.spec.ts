@@ -7,8 +7,8 @@ import { ConnectionError } from '../../src/connection.error';
 import {
   IMessageHandlerContext,
   IStanSubscriber,
-  OptionsBuilder,
   StanConnectionProvider,
+  SubscriberConfig,
 } from '../../src/interfaces';
 import { StanConnection } from '../../src/stan-connection';
 
@@ -71,12 +71,15 @@ describe(StanConnection.name, () => {
 
       beforeEach(() => {
         const subscriber = new EmptySubscriber();
-        const optionsBuilder: OptionsBuilder = (builder) => builder;
+        const config: SubscriberConfig = {
+          setupSubscription: (optionsBuilder) => optionsBuilder,
+          messageParser: (message) => JSON.parse(message.toString())
+        }
 
         fakeSubscription = new FakeSubscription();
         fakeStanConnection.subscribe.mockReturnValue(fakeSubscription);
 
-        connection.registerAsyncSubscriber('subject', optionsBuilder, subscriber);
+        connection.registerAsyncSubscriber('subject', config, subscriber);
       });
 
       xit('awaits for subscriptions being ready', (done) => {
