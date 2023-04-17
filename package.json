@@ -33,7 +33,7 @@
   "license": "MIT",
   "devDependencies": {
     "@nestjs/common": "^7.0.0",
-    "@nestjs/core": "^7.0.0",
+    "@nestjs/core": "^9.0.5",
     "@nestjs/testing": "^7.0.0",
     "@types/jest": "26.0.7",
     "@types/node": "14.0.26",
@@ -51,7 +51,7 @@
   },
   "peerDependencies": {
     "@nestjs/common": "^7.0.0",
-    "@nestjs/core": "^7.0.0"
+    "@nestjs/core": "^9.0.5"
   },
   "jest": {
     "preset": "ts-jest",
